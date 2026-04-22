@@ -18,6 +18,16 @@ services:
     depends_on:
       - temporal
 
+  # CLI do Temporal (temporal workflow list, temporal operator namespace list, etc.)
+  admin-tools:
+    image: temporalio/admin-tools:latest
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+    depends_on:
+      - temporal
+    stdin_open: true
+    tty: true
+
   # JupyterLab para explorar e testar o Temporal de forma interativa
   jupyter:
     build:
