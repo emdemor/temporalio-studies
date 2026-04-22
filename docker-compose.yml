@@ -4,25 +4,13 @@ networks:
 
 services:
 
-  # Servidor Temporal (dev mode, usa SQLite - sem banco externo necessário)
+  # Servidor Temporal em modo dev (SQLite integrado, UI incluída em :8080)
   temporal:
-    image: temporalio/auto-setup:latest
-    environment:
-      - DB=sqlite
+    image: temporalio/admin-tools:latest
+    command: temporal server start-dev --ip 0.0.0.0 --ui-port 8080
     ports:
-      - "7233:7233"   # porta que os workers/workflows usam para se conectar
-    networks:
-      - temporal-net
-
-  # Interface web do Temporal (acesse: http://localhost:8080)
-  temporal-ui:
-    image: temporalio/ui:latest
-    environment:
-      - TEMPORAL_ADDRESS=temporal:7233
-    ports:
+      - "7233:7233"
       - "8080:8080"
-    depends_on:
-      - temporal
     networks:
       - temporal-net
 
@@ -65,7 +53,7 @@ services:
   app:
     build: .
     volumes:
-      - ./workspace:/app    # pasta local workspace sincronizada com /app no container
+      - ./workspace:/app
     command: >
       bash -c "
         if [ -f requirements.txt ]; then
