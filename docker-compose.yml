@@ -1,3 +1,7 @@
+networks:
+  temporal-net:
+    driver: bridge
+
 services:
 
   # Servidor Temporal (dev mode, usa SQLite - sem banco externo necessário)
@@ -7,6 +11,8 @@ services:
       - DB=sqlite
     ports:
       - "7233:7233"   # porta que os workers/workflows usam para se conectar
+    networks:
+      - temporal-net
 
   # Interface web do Temporal (acesse: http://localhost:8080)
   temporal-ui:
@@ -17,6 +23,8 @@ services:
       - "8080:8080"
     depends_on:
       - temporal
+    networks:
+      - temporal-net
 
   # CLI do Temporal (temporal workflow list, temporal operator namespace list, etc.)
   admin-tools:
@@ -27,6 +35,8 @@ services:
       - temporal
     stdin_open: true
     tty: true
+    networks:
+      - temporal-net
 
   # JupyterLab para explorar e testar o Temporal de forma interativa
   jupyter:
@@ -48,6 +58,8 @@ services:
       - "8888:8888"
     depends_on:
       - temporal
+    networks:
+      - temporal-net
 
   # Ambiente Python para rodar os exercícios do curso
   app:
@@ -67,3 +79,5 @@ services:
       - temporal
     stdin_open: true
     tty: true
+    networks:
+      - temporal-net
