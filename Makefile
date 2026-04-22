@@ -1,4 +1,4 @@
-.PHONY: setup up down shell logs restart build
+.PHONY: setup up down shell logs restart build jupyter
 
 COURSE_REPO = https://github.com/temporalio/edu-101-python-code
 
@@ -26,3 +26,6 @@ logs:
 
 restart:
 	docker compose restart app
+
+jupyter:
+	docker compose up jupyter --build
